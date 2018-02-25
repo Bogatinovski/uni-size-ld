@@ -9,4 +9,5 @@ http://dbpedia.org/page/Category:Astronomical_objects
 
 http://dbpedia.org/page/Category:Lists_of_astronomical_objects
 
+http://dbpedia.org/page/Astronomical_object
 
