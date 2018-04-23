@@ -4,6 +4,8 @@ The .NET library used for RDF manipulation: https://github.com/dotnetrdf/dotnetr
 
 The Documentation for dotnetrdf: https://github.com/dotnetrdf/dotnetrdf/wiki/UserGuide-Getting-Started
 
+RDF Prefixes - https://prefix.cc/
+
 ## RDF Datasets - starting points
 http://dbpedia.org/page/Category:Astronomical_objects
 
