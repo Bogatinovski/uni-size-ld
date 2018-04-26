@@ -29,7 +29,6 @@ namespace usld_web
 	                                 ?predicate dbo:CelestialBody;
                                          rdfs:label ?label ;
 			                         dbo:abstract ?abstract ;
-			                         ?predicate2 dbr:Planet ;
 						             foaf:name ?name .
 		                        FILTER (langMatches(lang(?abstract), 'EN') && langMatches(lang(?label), 'EN') && langMatches(lang(?name), 'EN')) .
 		                        OPTIONAL {
