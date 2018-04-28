@@ -135,66 +135,81 @@ namespace usld_web.Controllers
             UriLoader.Load(g, uri);
 
             g.NamespaceMap.AddNamespace("dbo", new Uri("http://dbpedia.org/ontology/"));
+            g.NamespaceMap.AddNamespace("dbp", new Uri("http://dbpedia.org/property/"));
             g.NamespaceMap.AddNamespace("rdfs", new Uri("http://www.w3.org/2000/01/rdf-schema#"));
             g.NamespaceMap.AddNamespace("rdf", new Uri("https://www.w3.org/1999/02/22-rdf-syntax-ns#"));
             g.NamespaceMap.AddNamespace("foaf", new Uri("http://xmlns.com/foaf/0.1/"));
+            g.NamespaceMap.AddNamespace("owl", new Uri("http://www.w3.org/2002/07/owl#"));
 
             IEnumerable<Triple> predicates = null;
-            ILiteralNode labelNode = g.CreateLiteralNode("<http://www.w3.org/2000/01/rdf-schema#label>");
+            IUriNode labelNode = g.CreateUriNode("rdfs:label");
             predicates = g.GetTriplesWithPredicate(labelNode);
-            string label = predicates.FirstOrDefault().Object.ToSafeString();
-            string subject = predicates.FirstOrDefault().Subject.ToSafeString();
+            string label = predicates.Select(p => p.Object as ILiteralNode).Where(n => n.Language.ToLower() == "en").FirstOrDefault().ToSafeString();
+            string subject = predicates.FirstOrDefault()?.Subject.ToSafeString();
 
-            ILiteralNode nameNode = g.CreateLiteralNode("foaf:name");
+            IUriNode nameNode = g.CreateUriNode("foaf:name");
             predicates = g.GetTriplesWithPredicate(nameNode);
-            string name = predicates.FirstOrDefault().Object.ToSafeString();
+            string name = predicates.FirstOrDefault()?.Object.ToSafeString();
 
-            ILiteralNode abstractNode = g.CreateLiteralNode("dbo:abstract");
+            IUriNode abstractNode = g.CreateUriNode("dbo:abstract");
             predicates = g.GetTriplesWithPredicate(abstractNode);
-            string abstractValue = predicates.FirstOrDefault().Object.ToSafeString();
+            string abstractValue = predicates.Select(p => p.Object as ILiteralNode).Where(n => n.Language.ToLower() == "en").FirstOrDefault().ToSafeString();
 
-            ILiteralNode averageSpeedNode = g.CreateLiteralNode("dbo:averageSpeed");
+            IUriNode averageSpeedNode = g.CreateUriNode("dbo:averageSpeed");
             predicates = g.GetTriplesWithPredicate(averageSpeedNode);
-            string averageSpeed = predicates.FirstOrDefault().Object.ToSafeString();
+            string averageSpeed = predicates.FirstOrDefault()?.Object.ToSafeString();
 
-            ILiteralNode escapeVelocityNode = g.CreateLiteralNode("dbo:escapeVelocity");
+            IUriNode escapeVelocityNode = g.CreateUriNode("dbo:escapeVelocity");
             predicates = g.GetTriplesWithPredicate(escapeVelocityNode);
-            string escapeVelocity = predicates.FirstOrDefault().Object.ToSafeString();
+            string escapeVelocity = predicates.FirstOrDefault()?.Object.ToSafeString();
 
-            ILiteralNode meanTemperatureNode = g.CreateLiteralNode("dbo:meanTemperature");
+            IUriNode meanTemperatureNode = g.CreateUriNode("dbo:meanTemperature");
             predicates = g.GetTriplesWithPredicate(meanTemperatureNode);
-            string meanTemperature = predicates.FirstOrDefault().Object.ToSafeString();
+            string meanTemperature = predicates.FirstOrDefault()?.Object.ToSafeString();
 
-            ILiteralNode thumbnailNode = g.CreateLiteralNode("dbo:thumbnail");
+            IUriNode thumbnailNode = g.CreateUriNode("dbo:thumbnail");
             predicates = g.GetTriplesWithPredicate(thumbnailNode);
-            string thumbnail = predicates.FirstOrDefault().Object.ToSafeString();
-
-            ILiteralNode captionNode = g.CreateLiteralNode("dbp:caption");
+            string thumbnail = predicates.FirstOrDefault()?.Object.ToSafeString();
+            
+            IUriNode captionNode = g.CreateUriNode(new Uri("dbp:caption"));
             predicates = g.GetTriplesWithPredicate(captionNode);
-            string caption = predicates.FirstOrDefault().Object.ToSafeString();
+            string caption = predicates?.Select(p => p.Object as ILiteralNode).Where(n => n.Language.ToLower() == "en").FirstOrDefault().ToSafeString();
 
-            ILiteralNode angularSizeNode = g.CreateLiteralNode("dbp:angularSize");
+            IUriNode angularSizeNode = g.CreateUriNode("dbp:angularSize");
             predicates = g.GetTriplesWithPredicate(angularSizeNode);
-            string angularSize = predicates.FirstOrDefault().Object.ToSafeString();
+            string angularSize = predicates?.FirstOrDefault()?.Object.ToSafeString();
 
-            ILiteralNode argPeriNode = g.CreateLiteralNode("dbp:argPeri");
+            IUriNode argPeriNode = g.CreateUriNode("dbp:argPeri");
             predicates = g.GetTriplesWithPredicate(argPeriNode);
-            string argPeri = predicates.FirstOrDefault().Object.ToSafeString();
+            string argPeri = predicates.FirstOrDefault()?.Object.ToSafeString();
 
-            ILiteralNode ascNodeNode = g.CreateLiteralNode("dbp:ascNode");
+            IUriNode ascNodeNode = g.CreateUriNode("dbp:ascNode");
             predicates = g.GetTriplesWithPredicate(ascNodeNode);
-            string ascNode = predicates.FirstOrDefault().Object.ToSafeString();
+            string ascNode = predicates.FirstOrDefault()?.Object.ToSafeString();
 
-            ILiteralNode atmosphereNode = g.CreateLiteralNode("dbp:atmosphere");
+            IUriNode atmosphereNode = g.CreateUriNode("dbp:atmosphere");
             predicates = g.GetTriplesWithPredicate(atmosphereNode);
-            string atmosphere = predicates.FirstOrDefault().Object.ToSafeString();
+            string atmosphere = predicates.FirstOrDefault()?.Object.ToSafeString();
 
-            //string atmosphere = result["atmosphere"].ToSafeString();
-            //string atmosphereCompositionAggr = result["atmosphereCompositionAggr"].ToSafeString();
-            //string satelites = ((LiteralNode)result["satelites"])?.Value.ToSafeString();
-            //string siderealDay = ((LiteralNode)result["siderealDay"])?.Value.ToSafeString();
-            //string surfaceAreaAggr = ((LiteralNode)result["surfaceAreaAggr"])?.Value.ToSafeString();
-            //string surfaceGravAggr = ((LiteralNode)result["surfaceGravAggr"])?.Value.ToSafeString();
+            IUriNode atmosphereCompositionNode = g.CreateUriNode("dbp:atmosphereComposition");
+            predicates = g.GetTriplesWithPredicate(atmosphereCompositionNode);
+            string atmosphereComposition = predicates.FirstOrDefault()?.Object.ToSafeString();
+
+            IUriNode satelitesNode = g.CreateUriNode("dbp:satelites");
+            predicates = g.GetTriplesWithPredicate(satelitesNode);
+            string satelites = predicates.FirstOrDefault()?.Object.ToSafeString();
+
+            IUriNode siderealDayNode = g.CreateUriNode("dbp:siderealDay");
+            predicates = g.GetTriplesWithPredicate(siderealDayNode);
+            string siderealDay = predicates.FirstOrDefault()?.Object.ToSafeString();
+
+            IUriNode surfaceAreaNode = g.CreateUriNode("dbp:surfaceArea");
+            predicates = g.GetTriplesWithPredicate(surfaceAreaNode);
+            string surfaceArea = predicates.FirstOrDefault()?.Object.ToSafeString();
+
+            IUriNode surfaceGravNode = g.CreateUriNode("dbp:surfaceGrav");
+            predicates = g.GetTriplesWithPredicate(surfaceGravNode);
+            string surfaceGrav = predicates.FirstOrDefault()?.Object.ToSafeString();
 
             PlanetVm planet = new PlanetVm
             {
@@ -204,18 +219,18 @@ namespace usld_web.Controllers
                 Abstract = abstractValue,
                 AverageSpeed = averageSpeed,
                 EscapeVelocity = escapeVelocity,
-                //MeanTemperature = meanTemperatureAggr,
+                MeanTemperature = meanTemperature,
                 Thumbnail = thumbnail,
-                //Caption = captionAggr,
+                Caption = caption,
                 AngularSize = angularSize,
                 ArgPeri = argPeri,
                 AscNode = ascNode,
-                Atmosphere = atmosphere
-               // AtmosphereComposition = atmosphereCompositionAggr,
-                //Satelites = satelites,
-                //SiderealDay = siderealDay,
-                //SurfaceArea = surfaceAreaAggr,
-                //SurfaceGrav = surfaceGravAggr
+                Atmosphere = atmosphere,
+                AtmosphereComposition = atmosphereComposition,
+                Satelites = satelites,
+                SiderealDay = siderealDay,
+                SurfaceArea = surfaceArea,
+                SurfaceGrav = surfaceGrav
             };
 
             return Ok(planet);
