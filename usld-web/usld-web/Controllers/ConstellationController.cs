@@ -18,20 +18,89 @@ namespace usld_web.Controllers
         [ProducesResponseType(typeof(IEnumerable<ObjectPartialVm>), 200)]
         public IActionResult GetConstellations()
         {
-            
-            return Ok();
+            SparqlParameterizedString queryString = new SparqlParameterizedString();
+            queryString.Namespaces.AddNamespace("dbo", new Uri("http://dbpedia.org/ontology/"));
+            queryString.Namespaces.AddNamespace("dbp", new Uri("http://dbpedia.org/property/"));
+            queryString.Namespaces.AddNamespace("rdfs", new Uri("http://www.w3.org/2000/01/rdf-schema#"));
+            queryString.CommandText = SparqlCommands.GetListOfConstellations();
+
+            Console.WriteLine(queryString.ToString());
+
+            SparqlQueryParser parser = new SparqlQueryParser();
+            SparqlQuery query = parser.ParseFromString(queryString);
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
+
+            SparqlResultSet results = endpoint.QueryWithResultSet(query.ToString());
+            SparqlResult resultNode = results.FirstOrDefault();
+
+            ICollection<ObjectPartialVm> model = new List<ObjectPartialVm>();
+
+            foreach (SparqlResult result in results)
+            {
+                string subject = ((UriNode)result["subject"])?.Uri.ToSafeString();
+                string label = ((LiteralNode)result["label"])?.Value.ToSafeString();
+                string thumbnail = ((UriNode)result["thumbnail"])?.Uri.ToSafeString();
+                string comment = ((LiteralNode)result["comment"])?.Value.ToSafeString();
+
+                ObjectPartialVm objectPartialVm = new ObjectPartialVm
+                {
+                    Comment = comment,
+                    Label = label,
+                    Subject = subject,
+                    Thumbnail = thumbnail
+                };
+
+                model.Add(objectPartialVm);
+            }
+
+            return Ok(model);
         }
 
 
         [HttpGet]
         [Route("{id}")]
-        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(ConstellationVm), 200)]
         public IActionResult GetConstellation(string id)
         {
-           
+            Uri uri = new Uri(WebUtility.UrlDecode(id));
 
+            SparqlParameterizedString queryString = new SparqlParameterizedString();
+            queryString.Namespaces.AddNamespace("dbo", new Uri("http://dbpedia.org/ontology/"));
+            queryString.Namespaces.AddNamespace("dbp", new Uri("http://dbpedia.org/property/"));
+            queryString.Namespaces.AddNamespace("rdfs", new Uri("http://www.w3.org/2000/01/rdf-schema#"));
 
-            return Ok();
+            queryString.CommandText = SparqlCommands.GetSingleConstellation();
+            queryString.SetUri("subjectUri", uri);
+
+            SparqlQueryParser parser = new SparqlQueryParser();
+            SparqlQuery query = parser.ParseFromString(queryString);
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
+
+            SparqlResultSet results = endpoint.QueryWithResultSet(query.ToString());
+            SparqlResult resultNode = results.FirstOrDefault();
+
+            string subject = ((UriNode)resultNode["subject"])?.Uri.ToSafeString();
+            string label = ((LiteralNode)resultNode["label"])?.Value.ToSafeString();
+            string abstractValue = ((LiteralNode)resultNode["abstract"])?.Value.ToSafeString();
+            string thumbnail = ((UriNode)resultNode["thumbnail"])?.Uri.ToSafeString();
+            string numberbfstars = ((LiteralNode)resultNode["numberbfstars"])?.Value.ToSafeString();
+            string numbermainstars = ((LiteralNode)resultNode["numbermainstars"])?.Value.ToSafeString();
+            string symbolism = ((LiteralNode)resultNode["symbolism"])?.Value.ToSafeString();
+            string meteors = resultNode["meteorsAggr"] is UriNode ? ((LiteralNode)resultNode["meteorsLabel"])?.Value.ToSafeString() : ((LiteralNode)resultNode["meteorsAggr"])?.Value.ToSafeString();
+
+            ConstellationVm constellation = new ConstellationVm
+            {
+                Subject = subject,
+                Label = label,
+                Abstract = abstractValue,
+                Thumbnail = thumbnail,
+                Meteors = meteors,
+                NumberOfMainStars = numbermainstars,
+                NumberOfStars = numberbfstars,
+                Symbolism = symbolism
+            };
+
+            return Ok(constellation);
         }
     }
 }
