@@ -76,9 +76,55 @@ namespace usld_web.Controllers
         }
 
         [HttpGet]
+        [Route("Body/Planet")]
+        [ProducesResponseType(typeof(IEnumerable<ObjectPartialVm>), 200)]
+        public IActionResult GetPlanets()
+        {
+            SparqlParameterizedString queryString = new SparqlParameterizedString();
+            queryString.Namespaces.AddNamespace("dbo", new Uri("http://dbpedia.org/ontology/"));
+            queryString.Namespaces.AddNamespace("dbr", new Uri("http://dbpedia.org/resource/"));
+            queryString.Namespaces.AddNamespace("dbp", new Uri("http://dbpedia.org/property/"));
+            queryString.Namespaces.AddNamespace("rdfs", new Uri("http://www.w3.org/2000/01/rdf-schema#"));
+            queryString.Namespaces.AddNamespace("rdf", new Uri("https://www.w3.org/1999/02/22-rdf-syntax-ns#"));
+            queryString.Namespaces.AddNamespace("foaf", new Uri("http://xmlns.com/foaf/0.1/"));
+            queryString.CommandText = SparqlCommands.GetListOfPlanets();
+
+            Console.WriteLine(queryString.ToString());
+
+            SparqlQueryParser parser = new SparqlQueryParser();
+            SparqlQuery query = parser.ParseFromString(queryString);
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
+
+            SparqlResultSet results = endpoint.QueryWithResultSet(query.ToString());
+            SparqlResult resultNode = results.FirstOrDefault();
+
+            ICollection<ObjectPartialVm> model = new List<ObjectPartialVm>();
+
+            foreach (SparqlResult result in results)
+            {
+                string subject = ((UriNode)result["subject"])?.Uri.ToSafeString();
+                string label = ((LiteralNode)result["label"])?.Value.ToSafeString();
+                string thumbnail = ((UriNode)result["thumbnail"])?.Uri.ToSafeString();
+                string comment = ((LiteralNode)result["comment"])?.Value.ToSafeString();
+
+                ObjectPartialVm objectPartialVm = new ObjectPartialVm
+                {
+                    Comment = comment,
+                    Label = label,
+                    Subject = subject,
+                    Thumbnail = thumbnail
+                };
+
+                model.Add(objectPartialVm);
+            }
+
+            return Ok(model);
+        }
+
+        [HttpGet]
         [Route("Body/{bodyTypeUri}")]
         [ProducesResponseType(typeof(IEnumerable<ObjectPartialVm>), 200)]
-        public IActionResult GetPlanets([FromRoute]string bodyTypeUri)
+        public IActionResult GetBody([FromRoute]string bodyTypeUri)
         {
             Uri uri = new Uri(WebUtility.UrlDecode(bodyTypeUri));
 
@@ -127,7 +173,7 @@ namespace usld_web.Controllers
         [ProducesResponseType(typeof(PlanetVm), 200)]
         public IActionResult GetPlanet(string planetUri)
         {
-            planetUri = WebUtility.UrlDecode(planetUri);
+            /*planetUri = WebUtility.UrlDecode(planetUri);
             planetUri = planetUri.Replace("/resource/", "/page/");
             Uri uri = new Uri(planetUri);
 
@@ -171,7 +217,7 @@ namespace usld_web.Controllers
             predicates = g.GetTriplesWithPredicate(thumbnailNode);
             string thumbnail = predicates.FirstOrDefault()?.Object.ToSafeString();
             
-            IUriNode captionNode = g.CreateUriNode(new Uri("dbp:caption"));
+            IUriNode captionNode = g.CreateUriNode("dbp:caption");
             predicates = g.GetTriplesWithPredicate(captionNode);
             string caption = predicates?.Select(p => p.Object as ILiteralNode).Where(n => n.Language.ToLower() == "en").FirstOrDefault().ToSafeString();
 
@@ -232,6 +278,60 @@ namespace usld_web.Controllers
                 SurfaceArea = surfaceArea,
                 SurfaceGrav = surfaceGrav
             };
+
+            return Ok(planet); */
+
+            Uri uri = new Uri(WebUtility.UrlDecode(planetUri));
+
+            SparqlParameterizedString queryString = new SparqlParameterizedString();
+            queryString.Namespaces.AddNamespace("dbo", new Uri("http://dbpedia.org/ontology/"));
+            queryString.Namespaces.AddNamespace("dbp", new Uri("http://dbpedia.org/property/"));
+            queryString.Namespaces.AddNamespace("dbr", new Uri("http://dbpedia.org/resource/"));
+            queryString.Namespaces.AddNamespace("rdfs", new Uri("http://www.w3.org/2000/01/rdf-schema#"));
+            queryString.Namespaces.AddNamespace("rdf", new Uri("https://www.w3.org/1999/02/22-rdf-syntax-ns#"));
+            queryString.Namespaces.AddNamespace("foaf", new Uri("http://xmlns.com/foaf/0.1/"));
+            queryString.Namespaces.AddNamespace("owl", new Uri("http://www.w3.org/2002/07/owl#"));
+            queryString.Namespaces.AddNamespace("xsd", new Uri("http://www.w3.org/2001/XMLSchema#"));
+            queryString.CommandText = SparqlCommands.GetSinglePlanet();
+            queryString.SetUri("subjectUri", uri);
+            //queryString.BaseUri = uri;
+
+            SparqlQueryParser parser = new SparqlQueryParser();
+            SparqlQuery query = parser.ParseFromString(queryString);
+            SparqlRemoteEndpoint endpoint = new SparqlRemoteEndpoint(new Uri("http://dbpedia.org/sparql"), "http://dbpedia.org");
+
+            SparqlResultSet results = endpoint.QueryWithResultSet(query.ToString());
+            SparqlResult resultNode = results.FirstOrDefault();
+
+            string subject = ((UriNode)resultNode["subject"])?.Uri.ToSafeString();
+            string label = ((LiteralNode)resultNode["label"])?.Value.ToSafeString();
+            string name = ((LiteralNode)resultNode["name"])?.Value.ToSafeString();
+            string comment = ((LiteralNode)resultNode["comment"])?.Value.ToSafeString();
+            string abstractValue = ((LiteralNode)resultNode["abstract"])?.Value.ToSafeString();
+            string averageSpeed = ((LiteralNode)resultNode["averageSpeed"])?.Value.ToSafeString();
+            string meanTemperature = ((LiteralNode)resultNode["meanTemperatureAggr"])?.Value.ToSafeString();
+            string thumbnail = ((UriNode)resultNode["thumbnail"])?.Uri.ToSafeString();
+            string atmosphere = (resultNode["atmosphere"] is UriNode) ? ((UriNode)resultNode["atmosphere"])?.Uri.ToSafeString() : ((LiteralNode)resultNode["atmosphere"])?.Value.ToSafeString();
+            string atmosphereComposition = (resultNode["atmosphereCompositionAggr"] is UriNode) ? ((UriNode)resultNode["atmosphereCompositionAggr"])?.Uri.ToSafeString() : ((LiteralNode)resultNode["atmosphereCompositionAggr"])?.Value.ToSafeString();
+            string satelites = (resultNode["satellitesAggr"] is UriNode) ? ((LiteralNode)resultNode["satelliteLabel"])?.Value.ToSafeString() : ((LiteralNode)resultNode["satellitesAggr"])?.Value.ToSafeString();
+            string surfaceArea = ((LiteralNode)resultNode["surfaceAreaAggr"])?.Value.ToSafeString();
+            string surfaceArea2 = ((LiteralNode)resultNode["surfaceAreaAggr2"])?.Value.ToSafeString();
+
+            PlanetVm planet = new PlanetVm
+            {
+                Subject = subject,
+                Label = label,
+                Name = name,
+                Abstract = abstractValue,
+                AverageSpeed = averageSpeed,
+                MeanTemperature = meanTemperature,
+                Thumbnail = thumbnail,
+                Atmosphere = atmosphere,
+                AtmosphereComposition = atmosphereComposition,
+                Satelites = satelites,
+                SurfaceArea = string.IsNullOrEmpty(surfaceArea) ? surfaceArea2 : surfaceArea,
+            };
+
 
             return Ok(planet);
         }
