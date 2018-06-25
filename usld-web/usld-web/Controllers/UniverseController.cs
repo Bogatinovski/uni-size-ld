@@ -92,12 +92,12 @@ namespace usld_web.Controllers
             switch(category.Uri)
             {
                 case "http://dbpedia.org/ontology/Satellite":
-                    category.Thumbnail = "http://bpic.588ku.com/element_pic/16/12/07/0544afd0d2c9a4772cfbff5bc3e1f02f.jpg";
+                    category.Thumbnail = "http://scienceosaurus.com/wp-content/uploads/2016/12/256px-Full_Moon_as_Seen_From_Denmark.jpg?x85893";
                     category.Comment = "A celestial body orbiting the earth or another planet";
                     break;
 
                 case "http://dbpedia.org/ontology/Asteroid":
-                    category.Thumbnail = "https://www.macupdate.com/images/icons256/48979.png";
+                    category.Thumbnail = "https://ww2.kqed.org/wp-content/uploads/sites/35/2017/04/asteroid20161103-16-1-128x128.jpg";
                     category.Comment = "A small rocky body orbiting the sun. Large numbers of these, ranging enormously in size, are found between the orbits of Mars and Jupiter";
                     break;
 
