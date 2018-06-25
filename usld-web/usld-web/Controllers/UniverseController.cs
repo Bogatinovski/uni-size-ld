@@ -97,7 +97,7 @@ namespace usld_web.Controllers
                     break;
 
                 case "http://dbpedia.org/ontology/Asteroid":
-                    category.Thumbnail = "https://ww2.kqed.org/wp-content/uploads/sites/35/2017/04/asteroid20161103-16-1-128x128.jpg";
+                    category.Thumbnail = "http://www.judithirwin.com/uploads/9/7/2/4/97241160/gaspra_orig.jpg";
                     category.Comment = "A small rocky body orbiting the sun. Large numbers of these, ranging enormously in size, are found between the orbits of Mars and Jupiter";
                     break;
 
