@@ -69,7 +69,7 @@ namespace usld_web.Controllers
                     Name =  FirstCharToUpper(name)
                 };
 
-                GetThumbnail(category);
+                AdjustData(category);
 
                 model.Categories.Add(category);
             }
@@ -87,32 +87,38 @@ namespace usld_web.Controllers
             }
         }
 
-        private void GetThumbnail(HomeCategoryVm category)
+        private void AdjustData(HomeCategoryVm category)
         {
             switch(category.Uri)
             {
                 case "http://dbpedia.org/ontology/Satellite":
                     category.Thumbnail = "http://bpic.588ku.com/element_pic/16/12/07/0544afd0d2c9a4772cfbff5bc3e1f02f.jpg";
+                    category.Comment = "A celestial body orbiting the earth or another planet";
                     break;
 
                 case "http://dbpedia.org/ontology/Asteroid":
                     category.Thumbnail = "https://www.macupdate.com/images/icons256/48979.png";
+                    category.Comment = "A small rocky body orbiting the sun. Large numbers of these, ranging enormously in size, are found between the orbits of Mars and Jupiter, though some have more eccentric orbits";
                     break;
 
                 case "http://dbpedia.org/ontology/Constellation":
                     category.Thumbnail = "https://pm1.narvii.com/6433/6e8376431362f95295039d47d914d46467533af7_128.jpg";
+                    category.Comment = "A group of stars forming a recognizable pattern that is traditionally named after its apparent form or identified with a mythological figure";
                     break;
 
                 case "http://dbpedia.org/ontology/Galaxy":
                     category.Thumbnail = "https://pbs.twimg.com/profile_images/378800000849825178/3a7a6ec6fdb5121c8a3095e14f5e6e71.jpeg";
+                    category.Comment = "A system of millions or billions of stars, together with gas and dust, held together by gravitational attraction";
                     break;
 
                 case "http://dbpedia.org/ontology/Planet":
                     category.Thumbnail = "http://sciencediariescom-wp-media.s3-eu-central-1.amazonaws.com/wp-content/uploads/2017/01/19133731/planets-colours.jpg";
+                    category.Comment = "A celestial body moving in an elliptical orbit round a star";
                     break;
 
                 case "http://dbpedia.org/ontology/Star":
                     category.Thumbnail = "http://web.utah.edu/astro/astroinfo/eit001_prev.jpg";
+                    category.Comment = "A self-luminous gaseous spheroidal celestial body of great mass which produces energy by means of nuclear fusion reactions";
                     break;
             }
         }
