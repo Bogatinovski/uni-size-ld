@@ -10,5 +10,6 @@ namespace usld_web.ViewModels
         public string Uri { get; set; }
         public string Name { get; set; }
         public string Comment { get; set; }
+        public string Thumbnail { get; set; }
     }
 }

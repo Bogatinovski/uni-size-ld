@@ -69,10 +69,42 @@ namespace usld_web.Controllers
                     Name = name
                 };
 
+                GetThumbnail(category);
+
                 model.Categories.Add(category);
             }
 
             return Ok(model);
+        }
+
+        private void GetThumbnail(HomeCategoryVm category)
+        {
+            switch(category.Uri)
+            {
+                case "http://dbpedia.org/ontology/Satellite":
+                    category.Thumbnail = "http://bpic.588ku.com/element_pic/16/12/07/0544afd0d2c9a4772cfbff5bc3e1f02f.jpg";
+                    break;
+
+                case "http://dbpedia.org/ontology/Asteroid":
+                    category.Thumbnail = "https://www.macupdate.com/images/icons256/48979.png";
+                    break;
+
+                case "http://dbpedia.org/ontology/Constellation":
+                    category.Thumbnail = "https://pm1.narvii.com/6433/6e8376431362f95295039d47d914d46467533af7_128.jpg";
+                    break;
+
+                case "http://dbpedia.org/ontology/Galaxy":
+                    category.Thumbnail = "https://pbs.twimg.com/profile_images/378800000849825178/3a7a6ec6fdb5121c8a3095e14f5e6e71.jpeg";
+                    break;
+
+                case "http://dbpedia.org/ontology/Planet":
+                    category.Thumbnail = "http://sciencediariescom-wp-media.s3-eu-central-1.amazonaws.com/wp-content/uploads/2017/01/19133731/planets-colours.jpg";
+                    break;
+
+                case "http://dbpedia.org/ontology/Star":
+                    category.Thumbnail = "http://web.utah.edu/astro/astroinfo/eit001_prev.jpg";
+                    break;
+            }
         }
     }
 }
