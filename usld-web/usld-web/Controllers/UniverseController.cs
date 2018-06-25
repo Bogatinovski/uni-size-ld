@@ -98,11 +98,11 @@ namespace usld_web.Controllers
 
                 case "http://dbpedia.org/ontology/Asteroid":
                     category.Thumbnail = "https://www.macupdate.com/images/icons256/48979.png";
-                    category.Comment = "A small rocky body orbiting the sun. Large numbers of these, ranging enormously in size, are found between the orbits of Mars and Jupiter, though some have more eccentric orbits";
+                    category.Comment = "A small rocky body orbiting the sun. Large numbers of these, ranging enormously in size, are found between the orbits of Mars and Jupiter";
                     break;
 
                 case "http://dbpedia.org/ontology/Constellation":
-                    category.Thumbnail = "https://pm1.narvii.com/6433/6e8376431362f95295039d47d914d46467533af7_128.jpg";
+                    category.Thumbnail = "http://media.gettyimages.com/vectors/horoscope-constellation-zodiac-space-star-vector-illustration-vector-id626463330?s=170x170";
                     category.Comment = "A group of stars forming a recognizable pattern that is traditionally named after its apparent form or identified with a mythological figure";
                     break;
 
