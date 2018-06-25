@@ -102,7 +102,7 @@ namespace usld_web.Controllers
                     break;
 
                 case "http://dbpedia.org/ontology/Constellation":
-                    category.Thumbnail = "http://media.gettyimages.com/vectors/horoscope-constellation-zodiac-space-star-vector-illustration-vector-id626463330?s=170x170";
+                    category.Thumbnail = "https://is2-ssl.mzstatic.com/image/thumb/Purple49/v4/88/82/5e/88825ebc-ff12-171f-85e0-2ba4afe771e5/source/256x256bb.jpg";
                     category.Comment = "A group of stars forming a recognizable pattern that is traditionally named after its apparent form or identified with a mythological figure";
                     break;
 
@@ -112,7 +112,7 @@ namespace usld_web.Controllers
                     break;
 
                 case "http://dbpedia.org/ontology/Planet":
-                    category.Thumbnail = "http://sciencediariescom-wp-media.s3-eu-central-1.amazonaws.com/wp-content/uploads/2017/01/19133731/planets-colours.jpg";
+                    category.Thumbnail = "https://images2.storyjumper.com/transcoder.png?trim&id=67-0wctc5shjn-56glubvll&maxw=256&maxh=256";
                     category.Comment = "A celestial body moving in an elliptical orbit round a star";
                     break;
 
