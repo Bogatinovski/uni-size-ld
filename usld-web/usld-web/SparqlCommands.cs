@@ -88,7 +88,7 @@ namespace usld_web
                         } 
                         GROUP BY ?subject ?label ?name ?comment ?abstract ?averageSpeed ?escapeVelocity ?thumbnail ?angularSize ?argPeri ?ascNode ?atmosphere ?satelites ?siderealDay 
                         ORDER BY ?label ?name
-                        LIMIT 100";
+                        LIMIT 25";
         }
 
         // Satellites
@@ -109,7 +109,7 @@ namespace usld_web
                     } 
                     GROUP BY ?subject ?label ?thumbnail ?comment ?axialTilt ?abstract
                     ORDER BY ?label
-                    LIMIT 100";
+                    LIMIT 25";
         }
 
         public static string GetSingleSatellite()
@@ -135,7 +135,7 @@ namespace usld_web
         // Constelations
         public static string GetListOfConstellations()
         {
-            return @"SELECT DISTINCT ?subject ?numberbfstars ?numbermainstars ?symbolism (MAX(?meteors) AS ?meteorsAggr) ?meteorsLabel ?label ?thumbnail ?comment 
+            return @"SELECT DISTINCT ?subject ?numberbfstars ?numbermainstars (MAX(?symbolism) AS ?symbolismAggr) (MAX(?meteors) AS ?meteorsAggr) ?label ?thumbnail ?comment 
                     WHERE {
 	                    ?subject    ?predicate          dbo:CelestialBody ;
 				                    ?predicate          dbo:Constellation ;
@@ -146,15 +146,13 @@ namespace usld_web
                                     dbp:meteorshowers   ?meteors ;
                                     dbp:symbolism       ?symbolism ;
 				                    rdfs:comment        ?comment .
-                                    OPTIONAL { ?meteors rdfs:label ?meteorsLabel . 
-                                        FILTER(langMatches(lang(?meteorsLabel), 'EN')) 
-                                    }
+                                
                                     OPTIONAL { ?subject dbp:quadrant ?quadrant . }
 		                     FILTER(langMatches(lang(?label), 'EN') && langMatches(lang(?comment), 'EN'))
                     }
-                    GROUP BY ?subject ?meteorsLabel ?numberbfstars ?numbermainstars ?symbolism ?label ?thumbnail ?comment
+                    GROUP BY ?subject ?numberbfstars ?numbermainstars ?label ?thumbnail ?comment
                     ORDER BY ?label
-                    LIMIT 100";
+                    LIMIT 25";
         }
 
         public static string GetSingleConstellation()
@@ -193,7 +191,7 @@ namespace usld_web
                         OPTIONAL { ?subject dbo:thumbnail ?thumbnail . }
                 } 
                 ORDER BY ?label
-                LIMIT 100";
+                LIMIT 25";
         }
 
         public static string GetSingleAsteroid()
@@ -225,7 +223,7 @@ namespace usld_web
 		                FILTER(langMatches(lang(?label), 'EN') && langMatches(lang(?comment), 'EN'))
                 } 
                 ORDER BY ?label
-                LIMIT 100";
+                LIMIT 25";
         }
 
         public static string GetSingleGalaxy()
@@ -265,7 +263,7 @@ namespace usld_web
                 } 
                 GROUP BY ?subject ?constelLabel ?label ?thumbnail ?comment ?constel
                 ORDER BY ?label
-                LIMIT 100";
+                LIMIT 25";
         }
 
         public static string GetSingleStar()
@@ -306,7 +304,7 @@ namespace usld_web
 		                FILTER(langMatches(lang(?label), 'EN') && langMatches(lang(?comment), 'EN'))
                 } 
                 ORDER BY ?label
-                LIMIT 100";
+                LIMIT 25";
         }
 
         [Obsolete]
